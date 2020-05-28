@@ -1,4 +1,4 @@
-package mediawall.arduinolink.messages.enums;
+package arduinolink.websocket.messages.enums;
 
 public enum TriggerType {
     ERROR,

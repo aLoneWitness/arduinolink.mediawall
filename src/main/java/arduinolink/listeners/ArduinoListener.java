@@ -1,15 +1,18 @@
-package mediawall.arduinolink.listeners;
+package arduinolink.listeners;
 
+import arduinolink.websocket.WebsocketHandler;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListener;
-import mediawall.arduinolink.messages.TriggerMessage;
-import mediawall.arduinolink.messages.enums.TriggerType;
+import arduinolink.websocket.messages.TriggerMessage;
+import arduinolink.websocket.messages.enums.TriggerType;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 public class ArduinoListener implements SerialPortMessageListener {
+    private WebsocketHandler websocketHandler;
 
-    public ArduinoListener() {
-
+    public ArduinoListener(WebsocketHandler websocketHandler) {
+        this.websocketHandler = websocketHandler;
     }
 
     @Override
@@ -53,7 +56,9 @@ public class ArduinoListener implements SerialPortMessageListener {
             System.out.println("Trigger happened of type " + triggerType.name());
             TriggerMessage triggerMessage = new TriggerMessage();
             triggerMessage.setTriggerType(triggerType);
-
+            for (StompSession stompSession : this.websocketHandler.getSessions()) {
+                stompSession.send("/app/website", triggerMessage);
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
-package mediawall.arduinolink.messages;
+package arduinolink.websocket.messages;
 
 import lombok.Getter;
 import lombok.Setter;
-import mediawall.arduinolink.messages.enums.TriggerType;
+import arduinolink.websocket.messages.enums.TriggerType;
 
 public class TriggerMessage {
     @Setter @Getter
